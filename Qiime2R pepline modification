@@ -1,1 +1,131 @@
+---
+title: "Microbiome analysis pepline"
+author: "Annguyen97"
+date: "5/10/2022"
+output: html_document
+---
+Tutorial: Qiime2R(Jbisanz) pepline modification
+Original version by Jbisanz: https://github.com/jbisanz/qiime2R
+0. Set directory
+```{r, setup, include=FALSE}
+knitr::opts_knit$set(root.dir = 'E:/qiime2-data')
+```
+1. Library
+```{r}
+library (qiime2R)
+library (reticulate)
+library (yaml)
+library (tidyverse)
+library (ggregpel)
+library (ggtree)
+library (ape)
+```
+2. Read qza files
+2.1. Read table of sequence variants (SVs)
+```{r}
+SVs<-read_qza("table-dada2.qza")
+head(SVs)
+```
+2.2.Read sample-metadata
+```{r}
+metadata<-read_q2metadata("sample-metadata.tsv")
+read.table('sample-metadata.tsv', sep = '\t', head = TRUE)
+```
+2.3.Read taxonomy
+```{r}
+taxonomy<-read_qza("taxonomy.qza")
+head(taxonomy$data)
+```
+2.4.Read taxasums
+```{r}
+metadata<-read_q2metadata("sample-metadata.tsv")
+SVs<-read_qza("table.qza")$data
+taxonomy<-read_qza("taxonomy.qza")$data %>% parse_taxonomy()
+
+taxasums<-summarize_taxa(SVs, taxonomy)$Genus
+```
+3.Creating a Phyloseq Object
+```{r}
+physeq<-qza_to_phyloseq(
+    features="E:/qiime2-data/table.qza",
+    tree="E:/qiime2-data/rooted-tree.qza",
+    taxonomy="E:/qiime2-data/taxonomy.qza",
+    metadata = "E:/qiime2-data/sample-metadata.tsv"
+    )
+```
+4.Visualizations
+4.1. Alpha diversity
+4.1.1. Merge shannon vector to sample-metadata file
+```{r}
+metadata<-read_q2metadata("sample-metadata.tsv")
+shannon<-read_qza("shannon_vector.qza")
+
+shannon<-shannon$data %>% rownames_to_column("SampleID") # match shannon value to sample ID
+```
+*Make shannon value column in the sample-metadata column:
+```{r}
+metadata<-
+metadata %>% 
+  left_join(shannon)
+head(metadata)
+```
+4.1.2. Alpha diversity visualization option
+#Line graph
+```{r}
+metadata %>%
+    filter(!is.na(shannon_entropy)) %>%
+    ggplot(aes(x=`days-since-experiment-start`, y=`shannon_entropy`, color=`body-site`)) +
+    stat_summary(geom="errorbar", fun.data=mean_se, width=0) +
+    stat_summary(geom="line", fun.data=mean_se) +
+    stat_summary(geom="point", fun.data=mean_se) +
+    xlab("Days") +
+    ylab("Shannon Diversity") +
+    theme_q2r() + # try other themes like theme_bw() or theme_classic()
+    scale_color_viridis_d(name="Body Site") # use different color scale which is color blind friendly
+ggsave("Shannon_by_time.pdf", height=3, width=4, device="pdf") # save a PDF 3 inches by 4 inches
+```
+#Bar chart
+```{r}
+metadata %>%
+  filter(!is.na(shannon_entropy)) %>%
+  ggplot(aes(x=`reported-antibiotic-usage`, y=`shannon_entropy`, fill=`reported-antibiotic-usage`)) +
+  stat_summary(geom="bar", fun.data=mean_se, color="black") + #here black is the outline for the bars
+  geom_jitter(shape=21, width=0.2, height=0) +
+  coord_cartesian(ylim=c(2,7)) + # adjust y-axis
+  facet_grid(~`body-site`) + # create a panel for each body site
+  xlab("Antibiotic Usage") +
+  ylab("Shannon Diversity") +
+  theme_q2r() +
+  scale_fill_manual(values=c("cornflowerblue","indianred")) + #specify custom colors
+  theme(legend.position="none") #remove the legend as it isn't needed
+  ggsave("Shannon_by_abx.pdf", height=3, width=4, device="pdf") # save a PDF 3 inches by 4 inches
+```
+#Box plot
+4.2. Beta Diversity
+#PCoA 2D
+```{r}
+#Generating dataframe PC1,PC2
+p = data.frame(SampleID = c(uwunifrac$data$Vectors$SampleID), PC1 = c(uwunifrac$data$Vectors$PC1), PC2 = c(uwunifrac$data$Vectors$PC2))
+#Merge metadata with PCoA metrix
+pcoa = merge(metadata, p, by = "SampleID", all = TRUE)
+#PCoA plot 
+ggplot(pcoa, aes(PC1, PC2, col = `body-site`, fill = `body-site`)) + stat_ellipse(geom = "polygon", col = "black", alpha = 0.5) + geom_point(shape = 21, col = "black")
+```
+#PCoA 3D
+```{r}
+plot3d(x=pcoa$PC1, y=pcoa$PC2, z=pcoa$PC3)#view more in https://www.youtube.com/watch?v=6dyjG8p8U0Q
+```
+5.Taxonomy bar plot
+```{r}
+metadata<-read_q2metadata("sample-metadata.tsv")
+SVs<-read_qza("table.qza")$data
+taxonomy<-read_qza("taxonomy.qza")$data %>% parse_taxonomy()
+
+taxasums<-summarize_taxa(SVs, taxonomy)$Genus
+
+taxa_barplot(taxasums, metadata, "body-site")
+
+ggsave("barplot.pdf", height=4, width=8, device="pdf")
+```
+
 
