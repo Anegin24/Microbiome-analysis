@@ -62,7 +62,7 @@ shannon<-read_qza("shannon_vector.qza")
 
 shannon<-shannon$data %>% rownames_to_column("SampleID") # match shannon value to sample ID
 ```
-*Make shannon value column in the sample-metadata column:
+*Join shannon value column to the sample-metadata file:
 ```{r}
 metadata<-
 metadata %>% 
