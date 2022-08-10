@@ -15,14 +15,16 @@ qiime rescript cull-seqs
 qiime taxa filter-seqs 
 --i-sequences silva-138-ssu-nr99-seqs-cleaned.qza 
 --i-taxonomy silva-138-ssu-nr99-tax.qza 
---p-exclude 'd__Eukaryota' --p-mode 'contains' 
+--p-exclude 'd__Eukaryota' 
+--p-mode 'contains' 
 --o-filtered-sequences silva138_noEuk_seqs.qza
 #Filter by length
 #Archaea, Bacteria & Eukaryota (900, 1200, 1400 bases) - Excluding Eukaryota as it has already been removed.
 qiime rescript filter-seqs-length-by-taxon 
 --i-sequences silva138_noEuk_seqs.qza 
 --i-taxonomy silva-138-ssu-nr99-tax.qza 
---p-labels Archaea Bacteria --p-min-lens 900 1200 
+--p-labels Archaea Bacteria 
+--p-min-lens 900 1200 
 --o-filtered-seqs silva138_noEuk_AB_seqs.qza 
 --o-discarded-seqs silva138_Euk_seqs_discard.qza
 =>This step did not discard any sequences, as those sequences were filtered in the previous step itself
