@@ -1,0 +1,29 @@
+#V1-V2 amplicons
+#Extracting V1-V2 region
+#Primers: 27f & 338r
+qiime feature-classifier extract-reads 
+--i-sequences silva138_noEuk_AB_seqs_uniq.qza 
+--p-f-primer AGAGTTTGATCMTGGCTCAG 
+--p-r-primer TGCTGCCTCCCGTAGGAGT 
+--p-n-jobs 12 
+--o-reads silva138_AB_V1-V2seqs.qza
+=>Output: silva138_AB_V1-V2seqs.qza
+#Dereplicating the target region
+qiime rescript dereplicate 
+--i-sequences silva138_AB_V1-V2seqs.qza 
+--i-taxa silva138_noEuk_AB_tax_uniq.qza 
+--o-dereplicated-sequences silva138_AB_V1-V2seqs_uniq.qza 
+--o-dereplicated-taxa silva138_AB_V1-V2taxa_uniq.qza
+=>Dereplicated Sequences: silva138_AB_V1-V2seqs_uniq.qza
+=>Dereplicated Taxa: silva138_AB_V1-V2taxa_uniq.qza
+#Classifying & evaluating with RESCRIPt
+#Using multiple threads increases memory usage Ref. Using 1 thread with auto reads per batch (took approx 19 hrs)
+qiime rescript evaluate-fit-classifier 
+--i-sequences silva138_AB_V1-V2seqs_uniq.qza 
+--i-taxonomy silva138_AB_V1-V2taxa_uniq.qza 
+--o-classifier silva138_AB_V1-V2_classifier.qza 
+--o-observed-taxonomy silva138_AB_V1-V2_predicted_taxonomy.qza 
+--o-evaluation silva138_AB_V1-V2_classifier_eval.qzv
+=>Classifier: silva138_AB_V1-V2_classifier.qza
+=>Predicted Taxonomy: silva138_AB_V1-V2_predicted_taxonomy.qza
+=>Evaluation: silva138_AB_V1-V2_classifier_eval.qzv
