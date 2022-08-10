@@ -1,15 +1,35 @@
-
+Download Silva-138-database-using-qiime2-RESCRIPT
 #Downloading SILVA data
-qiime rescript get-silva-data --p-version '138' --p-target 'SSURef_NR99' --p-include-species-labels --o-silva-sequences silva-138-ssu-nr99-seqs.qza --o-silva-taxonomy silva-138-ssu-nr99-tax.qza
+qiime rescript get-silva-data 
+--p-version '138' 
+--p-target 'SSURef_NR99' 
+--p-include-species-labels 
+--o-silva-sequences silva-138-ssu-nr99-seqs.qza 
+--o-silva-taxonomy silva-138-ssu-nr99-tax.qza
 Taxonomy file has 7 levels as required and without gaps (all levels are labelled). Not performing the rank propagation step.
 #Removing low quality sequences
-qiime rescript cull-seqs --i-sequences silva-138-ssu-nr99-seqs.qza --o-clean-sequences silva-138-ssu-nr99-seqs-cleaned.qza
+qiime rescript cull-seqs 
+--i-sequences silva-138-ssu-nr99-seqs.qza 
+--o-clean-sequences silva-138-ssu-nr99-seqs-cleaned.qza
 #Remove Eukaryotic taxa
-qiime taxa filter-seqs --i-sequences silva-138-ssu-nr99-seqs-cleaned.qza --i-taxonomy silva-138-ssu-nr99-tax.qza --p-exclude 'd__Eukaryota' --p-mode 'contains' --o-filtered-sequences silva138_noEuk_seqs.qza
+qiime taxa filter-seqs 
+--i-sequences silva-138-ssu-nr99-seqs-cleaned.qza 
+--i-taxonomy silva-138-ssu-nr99-tax.qza 
+--p-exclude 'd__Eukaryota' --p-mode 'contains' 
+--o-filtered-sequences silva138_noEuk_seqs.qza
 #Filter by length
-#Archaea, Bacteria & Eukaryota (900, 1200, 1400 bases) - #Excluding Eukaryota as it has already been removed.
-qiime rescript filter-seqs-length-by-taxon --i-sequences silva138_noEuk_seqs.qza --i-taxonomy silva-138-ssu-nr99-tax.qza --p-labels Archaea Bacteria --p-min-lens 900 1200 --o-filtered-seqs silva138_noEuk_AB_seqs.qza --o-discarded-seqs silva138_Euk_seqs_discard.qza
+#Archaea, Bacteria & Eukaryota (900, 1200, 1400 bases) - Excluding Eukaryota as it has already been removed.
+qiime rescript filter-seqs-length-by-taxon 
+--i-sequences silva138_noEuk_seqs.qza 
+--i-taxonomy silva-138-ssu-nr99-tax.qza 
+--p-labels Archaea Bacteria --p-min-lens 900 1200 
+--o-filtered-seqs silva138_noEuk_AB_seqs.qza 
+--o-discarded-seqs silva138_Euk_seqs_discard.qza
 =>This step did not discard any sequences, as those sequences were filtered in the previous step itself
 #Dereplicating
 #Default mode - uniq; Default rank-handles - silva
-qiime rescript dereplicate --i-sequences silva138_noEuk_AB_seqs.qza --i-taxa silva-138-ssu-nr99-tax.qza --p-threads 12 --o-dereplicated-sequences sil
+qiime rescript dereplicate 
+--i-sequences silva138_noEuk_AB_seqs.qza 
+--i-taxa silva-138-ssu-nr99-tax.qza 
+--p-threads 12 
+--o-dereplicated-taxa silva138_noEuk_AB_tax_uniq.qza
