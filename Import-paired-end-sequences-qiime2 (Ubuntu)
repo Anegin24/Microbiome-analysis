@@ -1,0 +1,14 @@
+#Step 1: installing Miniconda and Mamba
+{wget -O install.sh "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+bash install.sh
+conda install -y -c conda-forge mamba
+mamba install -c bioconda seqfu}
+#Step 2: Sample data
+#Download:
+save as: .../reads/...
+#Step 3: Alternative method: manifest file
+#Create "Manifest.tsv"
+echo -e 'sample-id\tforward-absolute-filepath\treverse-absolute-filepath' > manifest.tsv
+#Check sample directory file: 
+for FOR in reads/*_raw_1*gz; do echo $FOR; done
+
