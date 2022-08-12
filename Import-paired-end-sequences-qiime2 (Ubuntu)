@@ -1,11 +1,11 @@
 #Step 1: installing Miniconda and Mamba
-{wget -O install.sh "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+```wget -O install.sh "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 bash install.sh
 conda install -y -c conda-forge mamba
-mamba install -c bioconda seqfu}
+mamba install -c bioconda seqfu```
 #Step 2: Sample data
-#Download:
-save as: .../reads/...
+#Download: https://drive.google.com/file/d/1MBzyM9bQy9iEtigK2CaBGU3MJmfHPhxb/view?usp=sharing
+Copy *fq.gz to: .../reads/...
 #Step 3: Alternative method: manifest file
 #Defination: If the reads have a different naming scheme, we can either rename them or prepare a manifest file that tells to Qiime which file is what. For paired end reads it should contain three coluns: sample name, forward file and reverse file.
 #Create "Manifest.tsv"
@@ -14,7 +14,7 @@ echo -e 'sample-id\tforward-absolute-filepath\treverse-absolute-filepath' > mani
 for FOR in reads/*_raw_1*gz; do echo $FOR; done
 #Fill information in manifest.tsv file
 for FOR in reads/*_raw_1*gz; #List sequences file
-do ID=$(basename $FOR | cut -f1,2 -d_); #Cut sample-id from r1 sequences
+do ID=$(basename $FOR | cut -f1,2 #field1&2 -d_); #Cut/create sample-id from r1 sequences
 REV=${FOR/_raw_1/_raw_2}; #replace raw_1 ~ raw_2 
 echo -e "${ID}\t${PWD}/${FOR}\t${PWD}/${REV}"; #fill manifest.tsv  
 done >>manifest.tsv #assign info to manifest.tsv
