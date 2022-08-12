@@ -7,8 +7,22 @@ mamba install -c bioconda seqfu}
 #Download:
 save as: .../reads/...
 #Step 3: Alternative method: manifest file
+#Defination: If the reads have a different naming scheme, we can either rename them or prepare a manifest file that tells to Qiime which file is what. For paired end reads it should contain three coluns: sample name, forward file and reverse file.
 #Create "Manifest.tsv"
 echo -e 'sample-id\tforward-absolute-filepath\treverse-absolute-filepath' > manifest.tsv
 #Check sample directory file: 
 for FOR in reads/*_raw_1*gz; do echo $FOR; done
-
+#Fill information in manifest.tsv file
+for FOR in reads/*_raw_1*gz; #List sequences file
+do ID=$(basename $FOR | cut -f1,2 -d_); #Cut sample-id from r1 sequences
+REV=${FOR/_raw_1/_raw_2}; #replace raw_1 ~ raw_2 
+echo -e "${ID}\t${PWD}/${FOR}\t${PWD}/${REV}"; #fill manifest.tsv  
+done >>manifest.tsv #assign info to manifest.tsv
+#Step4: Import data to qiime2
+#Full tutorial click here: https://docs.qiime2.org/2022.2/tutorials/importing/
+#At this tutorial we code:
+qiime tools import \
+  --type 'SampleData[PairedEndSequencesWithQuality]' \
+  --input-path manifest.tsv \
+  --output-path reads.qza \
+  --input-format PairedEndFastqManifestPhred33V2
