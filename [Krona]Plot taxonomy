@@ -1,0 +1,7 @@
+#Install Krona
+conda install -c bioconda krona
+#Generate plot
+ qiime krona collapse-and-plot \
+--i-table table.qza \
+--i-taxonomy taxonomy.qza \
+--o-krona-plot krona.qzv
