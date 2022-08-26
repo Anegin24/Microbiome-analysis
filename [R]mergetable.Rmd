@@ -1,0 +1,45 @@
+---
+title: "Merge-table"
+date: "2022-08-26"
+---
+Merge alpha-diversity table
+1-library
+```{r}
+library(readr)
+```
+2-Import alpha-diversity.tsv file
+```{r}
+shannon <- read_tsv("shannon/alpha-diversity.tsv")
+chao1 <- read_tsv("chao1/alpha-diversity.tsv")
+simpson <- read_tsv("simpson/alpha-diversity.tsv")
+faithpd <- read_tsv("faith_pd/alpha-diversity.tsv")
+pielou <- read_tsv("evenness/alpha-diversity.tsv")
+ace <- read_tsv("ace/alpha-diversity.tsv")
+```
+3-Merge table
+```{r}
+alphadiversity <- merge(shannon, faithpd, by = "sample-id", all =  TRUE)
+alphadiversity <- merge(alphadiversity, chao1, by = "sample-id", all =  TRUE)
+alphadiversity <- merge(alphadiversity, ace, by = "sample-id", all =  TRUE)
+alphadiversity <- merge(alphadiversity, simpson, by = "sample-id", all =  TRUE)
+alphadiversity <- merge(alphadiversity, pielou, by = "sample-id", all =  TRUE)
+```
+
+ABOUT MERGE COMMAND:
+Inner join: Merge what are same in 2 table
+```{r}
+inner <- merge(table1, table2, by = column)
+```
+Left (outer) join: Keep table 1 + what are in table 2 same in table 1
+```{r}
+left  <- merge(flights, weather, by = mergeCols, all.x = TRUE)
+```
+Right (outer) join: Keep table 2 + what are in table 1 same in table 2
+```{r}
+right <- merge(flights, weather, by = mergeCols, all.y = TRUE)
+```
+Full (outer) join: join all
+```{r}
+full <- merge(flights, weather, by = mergeCols, all = TRUE)
+```
+
