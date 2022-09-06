@@ -15,7 +15,8 @@ conda env list #check list tools
 prefetch SRR18794313 #download sample code SRR18794313
 fasterq-dump SRR18794313 --split-files --skip-technical #split to R and F reads.
 3-Model code for a lot of samples:
-...
+#Download a list of sequences:
+prefetch --option-file SraAccList.txt
 #push .sra out the folders.
 find . -name '*.sra' -print0 | xargs -0 mv -t . 
 #Delete all empty folders in the working directory
