@@ -14,4 +14,18 @@ conda env list #check list tools
 2- Download SRA sequences from NCBI
 prefetch SRR18794313 #download sample code SRR18794313
 fasterq-dump SRR18794313 --split-files --skip-technical #split to R and F reads.
-*Model code for a lot of samples:
+3-Model code for a lot of samples:
+...
+#push .sra out the folders.
+find . -name '*.sra' -print0 | xargs -0 mv -t . 
+#Delete all empty folders in the working directory
+find . -type d -empty -delete
+#Convert all .sra files into fastq files
+ls *.sra | parallel -j0 fastq-dump --split-files --origfmt {}
+ #Move .fastq and .sra file types into their own folders
+mkdir fastq
+mv *.fastq fastq
+mkdir sra
+mv *.sra sra
+#ok now check this tutorial for import sequences through manifest file:
+https://github.com/Anegin24/Microbiome-analysis/blob/main/Import-paired-end-sequences-qiime2%20(Ubuntu)
