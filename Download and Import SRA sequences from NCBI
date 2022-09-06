@@ -1,0 +1,17 @@
+Import SRA sequences database from NCBI 
+1- Install SRAtoolkit
+*Add channels:
+conda config --add channels bioconda
+conda config --add channels conda-forge
+conda config --show channels
+#Here you will see list of channels:
+# - conda-forge
+# - bioconda
+# - defaults
+*Install SRAtoolkit:
+conda create -n sratool sra-tools
+conda env list #check list tools
+2- Download SRA sequences from NCBI
+prefetch SRR18794313 #download sample code SRR18794313
+fasterq-dump SRR18794313 --split-files --skip-technical #split to R and F reads.
+*Model code for a lot of samples:
