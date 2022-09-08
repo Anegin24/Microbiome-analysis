@@ -127,5 +127,16 @@ taxa_barplot(taxasums, metadata, "body-site")
 
 ggsave("barplot.pdf", height=4, width=8, device="pdf")
 ```
+6.Heatmap
+```{r}
+library(tidyverse)
+library(qiime2R)
 
+metadata<-read_q2metadata("sample-metadata.tsv")
+SVs<-read_qza("table.qza")$data
+taxonomy<-read_qza("taxonomy.qza")$data %>% parse_taxonomy()
 
+taxasums<-summarize_taxa(SVs, taxonomy)$Genus
+
+taxa_heatmap(taxasums, metadata, "body-site")
+```
