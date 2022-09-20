@@ -74,8 +74,7 @@ LDA<-read_tsv("processed_data/MA_MM.0.03.lefse_summary") %>%
 drop_na(LDA) %>%
   filter (LDA > 3) %>%
 inner_join(., taxonomy, by=c("OTU" = "asvs")) %>%
-mutate (LDA = if_else(Class =="MM", -1*LDA, LDA), taxon = fct_reorder(taxon,LDA)) %>%
-ggplot(LDA, aes(x=LDA, y=taxon, fill=Class)) + geom_col() + 
-  theme_classic() + 
-  theme (axit.text.y = element_markdown())
+mutate (LDA = if_else(Class =="MM", -1*LDA, LDA), taxon = fct_reorder(taxon,LDA))
+
+ggplot(LDA, aes(x=LDA, y=taxon, fill=Class)) + geom_col() + labs (y=NULL, x="LDA Score (log 10)") + scale_x_continuous(limits = c(-6,6), breaks = seq(-6, 6, by=2)) + theme_classic()
 ```
