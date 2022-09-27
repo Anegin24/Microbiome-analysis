@@ -30,7 +30,7 @@ qiime rescript filter-seqs-length-by-taxon \
 =>This step did not discard any sequences, as those sequences were filtered in the previous step itself
 #Dereplicating
 #Default mode - uniq; Default rank-handles - silva
-qiime rescript dereplicate 
+qiime rescript dereplicate \
 --i-sequences silva138_noEuk_AB_seqs.qza \
 --i-taxa silva-138-ssu-nr99-tax.qza \
 --p-threads 12 \
