@@ -10,17 +10,17 @@ library(readr)
 2-Import alpha-diversity.tsv file
 ```{r}
 shannon <- read_tsv("shannon/alpha-diversity.tsv")
-shannon<-shannon %>% rownames_to_column("sample-id")
+colnames(shannon)[colnames(shannon) == "...1"] <- "sample-id"
 chao1 <- read_tsv("chao1/alpha-diversity.tsv")
-chao1<-chao1 %>% rownames_to_column("sample-id")
+colnames(chao1)[colnames(chao1) == "...1"] <- "sample-id"
 simpson <- read_tsv("simpson/alpha-diversity.tsv")
-simpson<-simpson %>% rownames_to_column("sample-id")
+colnames(simpson)[colnames(simpson) == "...1"] <- "sample-id"
 faithpd <- read_tsv("faithpd/alpha-diversity.tsv")
-faithpd<-faithpd %>% rownames_to_column("sample-id")
+colnames(faithpd)[colnames(faithpd) == "...1"] <- "sample-id"
 pielou <- read_tsv("pielou/alpha-diversity.tsv")
-pielou<-pielou %>% rownames_to_column("sample-id")
+colnames(pielou)[colnames(pielou) == "...1"] <- "sample-id"
 ace <- read_tsv("ace/alpha-diversity.tsv")
-ace<-ace %>% rownames_to_column("sample-id")
+colnames(ace)[colnames(ace) == "...1"] <- "sample-id"
 ```
 3-Merge table
 ```{r}
