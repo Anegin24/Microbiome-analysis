@@ -108,8 +108,12 @@ metadata %>%
 p = data.frame(SampleID = c(uwunifrac$data$Vectors$SampleID), PC1 = c(uwunifrac$data$Vectors$PC1), PC2 = c(uwunifrac$data$Vectors$PC2))
 #Merge metadata with PCoA metrix
 pcoa = merge(metadata, p, by = "SampleID", all = TRUE)
+#find PC1 PC2 percentage explaination
+percent_explain <- 100*weunifrac$data$Eigvals/sum(weunifrac$data$Eigvals)
+View(percent_explain)
 #PCoA plot 
 ggplot(pcoa, aes(PC1, PC2, col = `body-site`, fill = `body-site`)) + stat_ellipse(geom = "polygon", col = "black", alpha = 0.5) + geom_point(shape = 21, col = "black")
++ labs(x=PC1(a%),y=PC2(b%))
 ```
 #PCoA 3D
 ```{r}
