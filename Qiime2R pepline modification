@@ -101,6 +101,8 @@ metadata %>%
   ggsave("Shannon_by_abx.pdf", height=3, width=4, device="pdf") # save a PDF 3 inches by 4 inches
 ```
 #Box plot
+b<-inner_join(metadata, faithpd, by=c("SampleID" = "sample-id"))
+ggplot(b, aes(x=Type, y=`faith_pd`, fill=Type)) + geom_boxplot(outlier.colour="black", outlier.shape=16, outlier.size=2, notch=FALSE) + theme_q2r()
 4.2. Beta Diversity
 #PCoA 2D
 ```{r}
