@@ -113,7 +113,7 @@ percent_explain <- 100*weunifrac$data$Eigvals/sum(weunifrac$data$Eigvals)
 View(percent_explain)
 #PCoA plot 
 ggplot(pcoa, aes(PC1, PC2, col = `body-site`, fill = `body-site`)) + stat_ellipse(geom = "polygon", col = "black", alpha = 0.5) + geom_point(shape = 21, col = "black")
-+ labs(x=PC1(a%),y=PC2(b%))
++ labs(x="PC1(a%)",y="PC2(b%)")
 ```
 #PCoA 3D
 ```{r}
