@@ -6,9 +6,17 @@ Merge alpha-diversity table
 1-library
 ```{r}
 library(readr)
+library(readxl)
+library(ggplot2)
+library(RColorBrewer)
+library(glue)
+library(ggtext)
+library(dplyr)
+library(yaml)
 ```
 2-Import alpha-diversity.tsv file
 ```{r}
+metadata<-read_q2metadata("sample-metadata.tsv")
 shannon <- read_tsv("shannon/alpha-diversity.tsv")
 colnames(shannon)[colnames(shannon) == "...1"] <- "sample-id"
 chao1 <- read_tsv("chao1/alpha-diversity.tsv")
@@ -29,6 +37,7 @@ alphadiversity <- merge(alphadiversity, chao1, by = "sample-id", all =  TRUE)
 alphadiversity <- merge(alphadiversity, ace, by = "sample-id", all =  TRUE)
 alphadiversity <- merge(alphadiversity, simpson, by = "sample-id", all =  TRUE)
 alphadiversity <- merge(alphadiversity, pielou, by = "sample-id", all =  TRUE)
+alphadiversity <- left_join(alphadiversity,metadata,by=c("sample-id","SampleID"))
 ```
 
 ABOUT MERGE COMMAND:
