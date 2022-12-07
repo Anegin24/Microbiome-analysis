@@ -37,7 +37,7 @@ alphadiversity <- merge(alphadiversity, chao1, by = "sample-id", all =  TRUE)
 alphadiversity <- merge(alphadiversity, ace, by = "sample-id", all =  TRUE)
 alphadiversity <- merge(alphadiversity, simpson, by = "sample-id", all =  TRUE)
 alphadiversity <- merge(alphadiversity, pielou, by = "sample-id", all =  TRUE)
-alphadiversity <- left_join(alphadiversity,metadata,by=c("sample-id","SampleID"))
+alphadiversity <- left_join(alphadiversity,metadata,by=c("sample-id"="SampleID"))
 ```
 
 ABOUT MERGE COMMAND:
