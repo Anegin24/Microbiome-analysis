@@ -102,7 +102,12 @@ metadata %>%
 ```
 #Box plot
 b<-inner_join(metadata, faithpd, by=c("SampleID" = "sample-id"))
-ggplot(b, aes(x=Type, y=`faith_pd`, fill=Type)) + geom_boxplot(outlier.colour="black", outlier.shape=16, outlier.size=2, notch=FALSE) + theme_q2r()
+faithpd<-alphadiversity%>%
+    ggplot(aes(x=Type, y=`faith_pd`, fill=Type)) + 
+    geom_boxplot(outlier.colour="black", outlier.shape=16, outlier.size=2, notch=FALSE) + 
+    theme_q2r() + 
+    labs(y="Faith Phylogenetic Diversity",x="Experimental group") + 
+    scale_fill_manual(name=NULL, values = c(brewer.pal(8,"Dark2")))
 4.2. Beta Diversity
 #PCoA 2D
 ```{r}
