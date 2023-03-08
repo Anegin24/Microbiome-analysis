@@ -24,17 +24,14 @@ colnames(chao1)[colnames(chao1) == "...1"] <- "sample-id"
 simpson <- read_tsv("simpson/alpha-diversity.tsv")
 colnames(simpson)[colnames(simpson) == "...1"] <- "sample-id"
 faithpd <- read_tsv("faithpd/alpha-diversity.tsv")
-colnames(faithpd)[colnames(faithpd) == "...1"] <- "sample-id"
+colnames(faithpd)[colnames(faithpd) == "#SampleID"] <- "sample-id"
 pielou <- read_tsv("pielou/alpha-diversity.tsv")
 colnames(pielou)[colnames(pielou) == "...1"] <- "sample-id"
-ace <- read_tsv("ace/alpha-diversity.tsv")
-colnames(ace)[colnames(ace) == "...1"] <- "sample-id"
 ```
 3-Merge table
 ```{r}
 alphadiversity <- merge(shannon, faithpd, by = "sample-id", all =  TRUE)
 alphadiversity <- merge(alphadiversity, chao1, by = "sample-id", all =  TRUE)
-alphadiversity <- merge(alphadiversity, ace, by = "sample-id", all =  TRUE)
 alphadiversity <- merge(alphadiversity, simpson, by = "sample-id", all =  TRUE)
 alphadiversity <- merge(alphadiversity, pielou, by = "sample-id", all =  TRUE)
 alphadiversity <- left_join(alphadiversity,metadata,by=c("sample-id"="SampleID"))
